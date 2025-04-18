@@ -1,0 +1,25 @@
+<div class="results-container" *ngIf="venues">
+    <h2>Found {{ venues.length }} Venue(s)</h2>
+    
+    <div *ngIf="venues.length === 0" class="no-results">
+      <p>No venues match your criteria. Try a different search.</p>
+    </div>
+    
+    <div *ngIf="error" class="error-message">
+      <p>{{ error }}</p>
+    </div>
+    
+    <div class="venues-grid">
+      <div *ngFor="let venue of venues" class="venue-card">
+        <h3>{{ venue.name }}</h3>
+        <div class="venue-details">
+          <p><strong>Location:</strong> {{ venue.location }}</p>
+          <p><strong>Type:</strong> {{ venue.type }}</p>
+          <p><strong>Price Range:</strong> {{ venue.price_range }}</p>
+          <p><strong>Capacity:</strong> {{ venue.capacity }}</p>
+          <p><strong>Features:</strong> {{ venue.features?.join(', ') }}</p>
+          <p><strong>Available:</strong> {{ venue.available ? 'Yes' : 'No' }}</p>
+        </div>
+      </div>
+    </div>
+  </div>

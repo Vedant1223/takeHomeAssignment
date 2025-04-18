@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
 import os
+from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 from llm_agent import generate_sql_from_nl
 
@@ -11,6 +12,15 @@ class QueryInput(BaseModel):
 load_dotenv()
 
 app = FastAPI()
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:4200"],  # Angular default port
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
 
 DATABASE_URL = os.getenv("DATABASE_URL")
 engine = create_engine(DATABASE_URL)

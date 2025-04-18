@@ -1,0 +1,16 @@
+<div class="search-container">
+    <h2>Venue Search</h2>
+    <div class="search-box">
+      <input 
+        type="text" 
+        [(ngModel)]="queryText" 
+        placeholder="Describe venues you're looking for..." 
+        class="search-input"
+      />
+      <div class="button-group">
+        <button (click)="search()" class="search-button">Search Venues</button>
+        <button (click)="showSql()" class="sql-button">Show SQL</button>
+      </div>
+    </div>
+    <p class="hint">Examples: "Find all bars in downtown" or "Show venues with capacity over 100 that are available"</p>
+  </div>

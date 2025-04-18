@@ -1,0 +1,11 @@
+<div class="sql-container" *ngIf="sqlQuery">
+    <h2>Generated SQL Query</h2>
+    <div class="sql-code">
+      <pre>{{ sqlQuery }}</pre>
+    </div>
+    <p class="sql-info">This is the SQL query generated from your natural language input</p>
+  </div>
+  
+  <div class="error-message" *ngIf="error">
+    <p>{{ error }}</p>
+  </div>
