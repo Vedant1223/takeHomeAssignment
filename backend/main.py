@@ -3,7 +3,7 @@ from sqlalchemy import create_engine, text
 from dotenv import load_dotenv
 import os
 from pydantic import BaseModel
-# from llm_agent import generate_sql_from_nl
+from llm_agent import generate_sql_from_nl
 
 class QueryInput(BaseModel):
     query: str
@@ -40,3 +40,42 @@ def get_venue_by_id(venue_id: int):
         raise HTTPException(status_code=500, detail=str(e))
     
 
+@app.post("/query")
+def showQuery(input: QueryInput):
+    sql_query = generate_sql_from_nl(input.query)
+    if not sql_query:
+            return {
+                "status": "error",
+                "message": "Could not understand your request or it appears to be invalid. Please try rephrasing."
+            }
+
+    return {
+            "status": "success",
+            "sql_executed": sql_query
+    }
+
+
+@app.post("/recommend")
+def recommend_venues(input: QueryInput):
+    try:
+        # Generate SQL from natural language
+        sql_query = generate_sql_from_nl(input.query)
+        
+        if not sql_query:
+            return {
+                "status": "error",
+                "message": "Could not understand your request or it appears to be invalid. Please try rephrasing."
+            }
+        
+        # Execute the SQL query
+        with engine.connect() as conn:
+            result = conn.execute(text(sql_query))
+            venues = [dict(row._mapping) for row in result.fetchall()]
+        
+        # Return the venues along with the query that was executed (for transparency)
+        return {
+            "status": "success",
+            "venues": venues
+        }
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
